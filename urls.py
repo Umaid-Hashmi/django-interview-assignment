@@ -1,15 +1,22 @@
-from django.urls import include, path
-from rest_framework.authtoken import views
-from pustakaalay_app import admin
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView, 
-    TokenRefreshView,
-)
-from django.contrib import admin
+from django.urls import path
+
+from . import views
+
+from rest_framework.urlpatterns import format_suffix_patterns
+#<str:pk>
 
 urlpatterns = [
-    path('', include('pustakaalay_app.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+    path('logout', views.logout, name='logout'),
+    path('delete_account', views.delete_account, name='delete_account'),
+    path('book_manager', views.book_manager, name='book_manager'),
+
+    # APIS
+    path('api/users/list/', views.UserList.as_view()),
+    path('api/users/detail/', views.UserDetailAPI.as_view()),
+
+    path('api/books/', views.BookList.as_view()),
+    path('api/books/<int:pk>', views.BookDetailAPI.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
